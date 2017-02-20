@@ -1,0 +1,51 @@
+// main: ./main.less
+
+.container {
+    padding: 100px 15px
+}
+.full {
+    width: 100%;
+    height: 100vh;
+    &.welcome {
+        background-color: @color2;
+        color: @color4;
+        h1 {
+            width: 100%;
+            line-height: 100vh;
+            margin: 0;
+            text-align: center;
+            font-size: 120px;
+        }
+    }
+}
+.presentation {
+    background-color: @color1;
+    .container {
+        .demo {
+            background-color: @color3;
+            height: 300px;
+            border-radius: @radius;
+            padding: 40px;
+            margin-bottom: 100px;
+            .number {
+                font-size: 50px;
+                font-weight: bold;
+                color: @color1;
+            }
+            h3 {
+                margin: 0;
+                float: right;
+                font-size: 50px;
+                color: @color1;
+            }
+            .code {
+                width: 100%;
+                background-color: @color1;
+                border-radius: @radius;
+                height: 150px;
+                padding: 20px;
+                font-size: 19px;
+            }
+        }
+    }
+}
