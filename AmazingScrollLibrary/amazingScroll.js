@@ -2,10 +2,30 @@
 
  var asElement = function (element, animation) {
     let self = {};
+    let startElement = animation.getStartStyle();
+    let finishElement = animation.getFinishStyle();
+    self.init = function (){
+        self.startStyle();
+        self.addEvent();
+    };
 
-    self.cl = function (){
-        console.log("działa");
-    }
+    self.startStyle = function() {
+        for (var i = 0; i < startElement.length; i++) {
+            element.style[startElement[i].element] = startElement[i].value;
+        }
+    };
+
+    self.addEvent = function() {
+        window.addEventListener('scroll', function() {
+            if ((element.getBoundingClientRect().top / window.innerHeight) < 0.75) {
+                for (var i = 0; i < finishElement.length; i++) {
+                        element.style[finishElement[i].element] = finishElement[i].value;
+                }
+            }
+        });
+    };
+
+    self.init();
 
     return self;
 }
@@ -40,6 +60,10 @@ var animation = function (data) {
         return startStyle;
     }
 
+    self.getFinishStyle = function() {
+        return finishStyle;
+    }
+
     self.init();
 
     return self;
@@ -48,26 +72,8 @@ var animation = function (data) {
 if (document.querySelector('[data-as]')) {
     document.querySelectorAll('[data-as]').forEach(function(e) {
         var data = e.dataset.as;
-        var data2 = e.dataset.as.split(",");
-        var anim = new animation(data);
-        var startElement = anim.getStartStyle();
         if ((e.getBoundingClientRect().top / window.innerHeight) >= 1) {
-            for (var i = 0; i < startElement.length; i++) {
-                e.style[startElement[i].element] = startElement[i].value;
-            }
-            window.addEventListener('scroll', function() {
-                if ((e.getBoundingClientRect().top / window.innerHeight) < 0.75) {
-                    for (var i = 0; i < data2.length; i++) {
-                        var el = data2[i].split(":")[0].replace(/\s*/gi, "");
-                        var val1 = data2[i].split(":")[1].split("->")[0];
-                        var val2 = data2[i].split(":")[1].split("->")[1];
-                        if (val2 !== undefined)
-                            e.style[el] = val2;
-                        else
-                            e.style[el] = val1;
-                    }
-                }
-            })
+            new asElement(e,new animation(data));
         }
     });
 }
