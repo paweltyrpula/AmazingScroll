@@ -6,7 +6,8 @@
     let finishElement = animation.getFinishStyle();
     self.init = function (){
         self.startStyle();
-        self.addEvent();
+        self.addScrollEvent();
+        self.addRetryFunction();
     };
 
     self.startStyle = function() {
@@ -15,7 +16,7 @@
         }
     };
 
-    self.addEvent = function() {
+    self.addScrollEvent = function() {
         window.addEventListener('scroll', function() {
             if ((element.getBoundingClientRect().top / window.innerHeight) < 0.75) {
                 for (var i = 0; i < finishElement.length; i++) {
@@ -23,6 +24,13 @@
                 }
             }
         });
+    };
+
+    self.addRetryFunction = function() {
+        element.asRetry = function() {
+            this.style.transition = "";
+            self.startStyle();
+        }
     };
 
     self.init();
