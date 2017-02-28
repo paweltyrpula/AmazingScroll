@@ -1,10 +1,10 @@
 
 "use strict";
 
- var asElement = function (element, animation) {
+const asElement = function (element, animation) {
     let self = {};
-    let startElement = animation.getStartStyle();
-    let finishElement = animation.getFinishStyle();
+    const startElement = animation.getStartStyle(),
+        finishElement = animation.getFinishStyle();
     self.init = function (){
         self.startStyle();
         self.addScrollEvent();
@@ -12,22 +12,24 @@
     };
 
     self.startStyle = function() {
-        element.style['transition'] = "all 0s";
-        for (var i = 0; i < startElement.length; i++) {
-            element.style[startElement[i].element] = startElement[i].value;
-        }
-        return true;
+        startElement.forEach((o) => {
+            element.style[o.element] = o.value;
+        });
     };
 
     self.animate = function() {
-        for (var i = 0; i < finishElement.length; i++) {
-            element.style[finishElement[i].element] = finishElement[i].value;
-        }
+        finishElement.forEach((o) => {
+            element.style[o.element] = o.value;
+        });
     }
-    
+
+    self.position = function () {
+        return element.getBoundingClientRect().top / window.innerHeight;
+    }
+
     self.addScrollEvent = function() {
-        window.addEventListener('scroll', function() {
-            if ((element.getBoundingClientRect().top / window.innerHeight) < 0.75) {
+        window.addEventListener('scroll', () => {
+            if (self.position() < 0.75) {
                 self.animate();
             }
         });
@@ -47,15 +49,15 @@
     return self;
 }
 
-var animationList = {};
+let animationList = {};
 function animationAdd(name, data) {
     animationList[name] = {
         "data": data
     }
 };
 
-var animation = function (data) {
-    var self = {},
+const animation = function (data) {
+    let self = {},
         startStyle = [],
         finishStyle = [];
 
@@ -63,8 +65,8 @@ var animation = function (data) {
         if(animationList[data])
             data = animationList[data].data;
         let tab = [];
-        tab = data.split(',');
-        tab.forEach(function(e) {
+        tab = data.split(';');
+        tab.forEach((e) => {
             let styleS = {},
                 styleF = {};
             styleS["element"] = e.split(":")[0].replace(/\s*/gi, "");
@@ -94,14 +96,12 @@ var animation = function (data) {
 
 document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('[data-as]')) {
-        var element = document.querySelectorAll('[data-as]')
-        for(var i = 0; i < element.length; i++){
-            var data = element[i].dataset.as;
-            if ((element[i].getBoundingClientRect().top / window.innerHeight) >= 1) {
-                new asElement(element[i],new animation(data));
+        const dataAs = document.querySelectorAll('[data-as]');
+        [...dataAs].forEach((e) => {
+            const data = e.dataset.as;
+            if ((e.getBoundingClientRect().top / window.innerHeight) >= 1) {
+                new asElement(e, new animation(data));
             }
-        }
+        });
     }
 });
-
-animationAdd('fade-left','left:-300px->0,transition:->all 1s');
