@@ -78,10 +78,11 @@ var animation = function (data) {
 }
 
 if (document.querySelector('[data-as]')) {
-    document.querySelectorAll('[data-as]').forEach(function(e) {
-        var data = e.dataset.as;
-        if ((e.getBoundingClientRect().top / window.innerHeight) >= 1) {
-            new asElement(e,new animation(data));
+    var element = document.querySelectorAll('[data-as]')
+    for(var i = 0; i < element.length; i++){
+        var data = element[i].dataset.as;
+        if ((element[i].getBoundingClientRect().top / window.innerHeight) >= 1) {
+            new asElement(element[i],new animation(data));
         }
-    });
+    }
 }
