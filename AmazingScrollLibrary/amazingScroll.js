@@ -1,3 +1,4 @@
+
 "use strict";
 
  var asElement = function (element, animation) {
@@ -11,25 +12,33 @@
     };
 
     self.startStyle = function() {
+        element.style['transition'] = "all 0s";
         for (var i = 0; i < startElement.length; i++) {
             element.style[startElement[i].element] = startElement[i].value;
         }
+        return true;
     };
 
+    self.animate = function() {
+        for (var i = 0; i < finishElement.length; i++) {
+            element.style[finishElement[i].element] = finishElement[i].value;
+        }
+    }
+    
     self.addScrollEvent = function() {
         window.addEventListener('scroll', function() {
             if ((element.getBoundingClientRect().top / window.innerHeight) < 0.75) {
-                for (var i = 0; i < finishElement.length; i++) {
-                        element.style[finishElement[i].element] = finishElement[i].value;
-                }
+                self.animate();
             }
         });
     };
 
     self.addRetryFunction = function() {
         element.asRetry = function() {
-            this.style.transition = "";
             self.startStyle();
+            setTimeout(function() {
+                self.animate();
+            },0);
         }
     };
 
@@ -38,7 +47,12 @@
     return self;
 }
 
-var animationSet = new Set();
+var animationList = {};
+function animationAdd(name, data) {
+    animationList[name] = {
+        "data": data
+    }
+};
 
 var animation = function (data) {
     var self = {},
@@ -46,6 +60,8 @@ var animation = function (data) {
         finishStyle = [];
 
     self.init = function () {
+        if(animationList[data])
+            data = animationList[data].data;
         let tab = [];
         tab = data.split(',');
         tab.forEach(function(e) {
@@ -61,7 +77,6 @@ var animation = function (data) {
             if(styleF.element !== undefined && styleF.value !== undefined)
                 finishStyle.push(styleF);
         });
-        animationSet.add(this);
     }
 
     self.getStartStyle = function() {
@@ -77,12 +92,16 @@ var animation = function (data) {
     return self;
 }
 
-if (document.querySelector('[data-as]')) {
-    var element = document.querySelectorAll('[data-as]')
-    for(var i = 0; i < element.length; i++){
-        var data = element[i].dataset.as;
-        if ((element[i].getBoundingClientRect().top / window.innerHeight) >= 1) {
-            new asElement(element[i],new animation(data));
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.querySelector('[data-as]')) {
+        var element = document.querySelectorAll('[data-as]')
+        for(var i = 0; i < element.length; i++){
+            var data = element[i].dataset.as;
+            if ((element[i].getBoundingClientRect().top / window.innerHeight) >= 1) {
+                new asElement(element[i],new animation(data));
+            }
         }
     }
-}
+});
+
+animationAdd('fade-left','left:-300px->0,transition:->all 1s');
