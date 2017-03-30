@@ -1,9 +1,8 @@
-
 "use strict";
 
-const asElement = function (element, animation) {
-    let self = {};
-    const startElement = animation.getStartStyle(),
+var asElement = function (element, animation) {
+    var self = {};
+    var startElement = animation.getStartStyle(),
         finishElement = animation.getFinishStyle();
     self.init = function (){
         self.startStyle();
@@ -12,13 +11,13 @@ const asElement = function (element, animation) {
     };
 
     self.startStyle = function() {
-        startElement.forEach((o) => {
+        startElement.forEach(function(o) {
             element.style[o.element] = o.value;
         });
     };
 
     self.animate = function() {
-        finishElement.forEach((o) => {
+        finishElement.forEach(function(o) {
             element.style[o.element] = o.value;
         });
     }
@@ -28,7 +27,7 @@ const asElement = function (element, animation) {
     }
 
     self.addScrollEvent = function() {
-        window.addEventListener('scroll', () => {
+        window.addEventListener('scroll', function() {
             if (self.position() < 0.75) {
                 self.animate();
             }
@@ -49,25 +48,25 @@ const asElement = function (element, animation) {
     return self;
 }
 
-let animationList = {};
+var animationList = {};
 function animationAdd(name, data) {
     animationList[name] = {
         "data": data
     }
 };
 
-const animation = function (data) {
-    let self = {},
+var animation = function (data) {
+    var self = {},
         startStyle = [],
         finishStyle = [];
 
     self.init = function () {
         if(animationList[data])
             data = animationList[data].data;
-        let tab = [];
+        var tab = [];
         tab = data.split(';');
-        tab.forEach((e) => {
-            let styleS = {},
+        tab.forEach(function(e) {
+            var styleS = {},
                 styleF = {};
             styleS["element"] = e.split(":")[0].replace(/\s*/gi, "");
             styleS["value"] = e.split(":")[1].split("->")[0];
@@ -96,11 +95,13 @@ const animation = function (data) {
 
 document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('[data-as]')) {
-        const dataAs = document.querySelectorAll('[data-as]');
-        [...dataAs].forEach((e) => {
-            const data = e.dataset.as;
+        var dataAs = document.querySelectorAll('[data-as]');
+        var tab = [];
+        for(var i = 0; i < dataAs.length; i++){ tab[i] = dataAs[i]}
+        tab.forEach(function(e) {
+            var data = e.dataset.as;
             if ((e.getBoundingClientRect().top / window.innerHeight) >= 1) {
-                new asElement(e, new animation(data));
+                asElement(e, animation(data));
             }
         });
     }
