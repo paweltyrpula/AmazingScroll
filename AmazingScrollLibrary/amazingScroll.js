@@ -5,7 +5,12 @@ var AmazingScroll = function (config_user) {
         start: {
             ratio: (config_user && config_user.start && config_user.start.ratio)?config_user.start.ratio:0.75,
             dataName: (config_user && config_user.start && config_user.start.dataName)?config_user.start.dataName:"as",
-            visibleAfterLoading: (config_user && config_user.start && config_user.start.visibleAfterLoading)?config_user.start.visibleAfterLoading:false
+            visibleAfterLoading: (config_user && config_user.start && config_user.start.visibleAfterLoading)?config_user.start.visibleAfterLoading:false,
+            waitForScroll: {
+                on: (config_user && config_user.start && config_user.start.waitForScroll && config_user.start.waitForScroll.on)?config_user.start.waitForScroll.on:true,
+                ratio: (config_user && config_user.start && config_user.start.waitForScroll && config_user.start.waitForScroll.ratio)?config_user.start.waitForScroll.ratio:1,
+                delay: (config_user && config_user.start && config_user.start.waitForScroll && config_user.start.waitForScroll.delay)?config_user.start.waitForScroll.delay:200,
+            }
         },
         animation: (config_user && config_user.animation)?config_user.animation:false
     }
@@ -18,6 +23,7 @@ var AmazingScroll = function (config_user) {
             self.startStyle();
             self.addScrollEvent();
             self.addRetryFunction();
+            self.startAnimate();
         };
 
         self.startStyle = function() {
@@ -30,6 +36,13 @@ var AmazingScroll = function (config_user) {
             finishElement.forEach(function(o) {
                 element.style[o.element] = o.value;
             });
+        }
+
+        self.startAnimate = function() {
+            if(!config.start.waitForScroll.on && self.position() < config.start.waitForScroll.ratio)
+                setTimeout(function() {
+                    self.animate();
+                }, config.start.waitForScroll.delay)
         }
 
         self.position = function () {
