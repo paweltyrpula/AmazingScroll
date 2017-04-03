@@ -6,6 +6,10 @@ var config = {
         ratio:0.2,
         dataName:"ask",
         visibleAfterLoading:true
+    },
+    animation: {
+        "fade-left":"left:-300px->0; transition:all 0s->all 1s",
+        "fade-top":"top:-200px->0; opacity:0->1; transition:all 0s->all 0.5s"
     }
 }
 var animate1 = AmazingScroll(config);

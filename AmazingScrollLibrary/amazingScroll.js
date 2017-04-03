@@ -19,6 +19,7 @@ var AmazingScroll = function (config_user) {
         var self = {};
         var startElement = animation.getStartStyle(),
             finishElement = animation.getFinishStyle();
+
         self.init = function (){
             self.startStyle();
             self.addScrollEvent();
@@ -84,8 +85,8 @@ var AmazingScroll = function (config_user) {
             finishStyle = [];
 
         self.init = function () {
-            if(animationList[data])
-                data = animationList[data].data;
+            if(config.animation[data])
+                data = config.animation[data];
             var tab = [];
             tab = data.split(';');
             tab.forEach(function(e) {
