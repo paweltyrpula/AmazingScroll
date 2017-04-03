@@ -1,16 +1,20 @@
 //************************************
-//            ANIMATION
+//          ANIMATION CONFIG
 
-animationList = {
-    'fade-left': {
-        'data':`left:-300px->0;
-                transition:->all 1s`
+var animate1 = AmazingScroll({
+    start: {
+        ratio:0.2,
+        dataName:"ask",
+        visibleAfterLoading:true
+    },
+    animation: {
+        "fade-left":"left:-300px->0; transition:all 0s->all 1s",
+        "fade-top":"top:-200px->0; opacity:0->1; transition:all 0s->all 0.5s"
     }
-}
+});
+var animate2 = AmazingScroll();
 
-// animationAdd('fade-left','left:-300px->0,transition:->all 1s');
-
-//          END ANIMATION
+//        END ANIMATION CONFIG
 //************************************
 
 const codeLine = document.querySelectorAll('.code-line');
