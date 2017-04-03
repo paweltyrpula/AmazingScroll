@@ -90,18 +90,31 @@ var AmazingScroll = function (config_user) {
             var tab = [];
             tab = data.split(';');
             tab.forEach(function(e) {
-                var styleS = {},
-                    styleF = {};
-                styleS["element"] = e.split(":")[0].replace(/\s*/gi, "");
-                styleS["value"] = e.split(":")[1].split("->")[0];
-                if(styleS.element !== undefined && styleS.value !== undefined)
-                    startStyle.push(styleS);
-
-                styleF["element"] = e.split(":")[0].replace(/\s*/gi, "");
-                styleF["value"] = e.split(":")[1].split("->")[1];
-                if(styleF.element !== undefined && styleF.value !== undefined)
-                    finishStyle.push(styleF);
+                if(e.indexOf(':') > -1) {
+                    createStartStyle(e);
+                    createFinishStyle(e);
+                }
             });
+        }
+
+        var createStartStyle = function(e) {
+            var styleS = {};
+
+            styleS["element"] = e.split(":")[0].replace(/\s*/gi, "");
+            styleS["value"] = e.split(":")[1].split("->")[0];
+
+            if(styleS.element !== undefined && styleS.value !== undefined)
+                startStyle.push(styleS);
+        }
+
+        var createFinishStyle = function(e) {
+            var styleF = {};
+
+            styleF["element"] = e.split(":")[0].replace(/\s*/gi, "");
+            styleF["value"] = e.split(":")[1].split("->")[1];
+
+            if(styleF.element !== undefined && styleF.value !== undefined)
+                finishStyle.push(styleF);
         }
 
         self.getStartStyle = function() {
